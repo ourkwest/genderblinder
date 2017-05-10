@@ -10,7 +10,7 @@ A browser extension to remove implicit gender from English language web pages.
 
 ## Install
 
-### Chrome - https://chrome.google.com/webstore/detail/gender-blinder/fchfnnmlenjoppfonlacepldllfaglmg
+* Chrome - https://chrome.google.com/webstore/detail/gender-blinder/fchfnnmlenjoppfonlacepldllfaglmg
 
 ## (Un)License
 
