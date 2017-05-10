@@ -11,3 +11,8 @@ A browser extension to remove implicit gender from English language web pages.
 ## Install
 
 ### Chrome - https://chrome.google.com/webstore/detail/gender-blinder/fchfnnmlenjoppfonlacepldllfaglmg
+
+## (Un)License
+
+This is free and unencumbered software released into the public domain.
+Please see the UNLICENSE.txt file for details.
