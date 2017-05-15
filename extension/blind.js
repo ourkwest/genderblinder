@@ -5,7 +5,7 @@ var pronounSets = { /* more: https://en.wikipedia.org/wiki/Third-person_pronoun#
    'c': ['ey', 'em', 'eir', 'eirs', 'eirself'],
    'd': ['per', 'per', 'pers', 'pers', 'perself'],
    'e': ['sie', 'sir', 'hir', 'hirs', 'hirself'],
-   'f': ['they', 'them', 'their', 'theirs', 'theirself'],
+   'f': ['they', 'them', 'their', 'theirs', 'themselves'],
    'g': ['ve', 'ver', 'vis', 'vers', 'verself'],
    'h': ['zie', 'zim', 'zir', 'zirs', 'zirself']
 };
@@ -43,37 +43,37 @@ var nounSubs = {
     'boy': 'child',
     'girlfriend': 'friend',
     'boyfriend': 'friend',
-    'mr': 'mx',
-    'mrs': 'mx',
-    'ms': 'mx',
-    'miss': 'mx'
 };
+
+var honourifics = ['Mr','Mrs','Ms','Miss'];
 
 var substitutions = Object.assign(pronounSubs, nounSubs);
 
 var subsRegex = new RegExp('\\b(' + Object.keys(substitutions).join('|') + ')\\b', 'ig');
+var honourificRegex = new RegExp('\\b(' + honourifics.join('|') + ')\\b', 'g');
 var manSuffixRegex = new RegExp('(..)(man|men)\\b', 'ig');
-var whitespaceRegex = new RegExp('\s', 'g');
-var capitalisedRegex = new RegExp('[A-Z]{1}[a-z]{1}');
-var upperCaseRegex = new RegExp('[A-Z]{2}');
-var lowerCaseRegex = new RegExp('[a-z]{2}');
+var whitespaceRegex = new RegExp('\\s');
+var upperCaseRegex = new RegExp('^[A-Z]{2}');
+var lowerCaseRegex = new RegExp('^[a-z]{2}');
 
 function personify(caseTest, part2) {
-    if (capitalisedRegex.test(caseTest)) {
-        return part2 == 'men' ? 'People' : 'Person';
-    } else if (upperCaseRegex.test(caseTest)) {
-        return part2 == 'men' ? 'PEOPLE' : 'PERSON';
+    if (upperCaseRegex.test(caseTest)) {
+        return part2.toLowerCase() == 'men' ? 'PEOPLE' : 'PERSON';
     } else if (lowerCaseRegex.test(caseTest)) {
-        return part2 == 'men' ? 'people' : 'person';
+        return part2.toLowerCase() == 'men' ? 'people' : 'person';
     }
+    return part2 == 'men' ? 'People' : 'Person';
 }
 
 function manSuffixReplacer(match, group1, group2) {
-    if (whitespaceRegex.test(group1) || match.toLowerCase() == "human") {
-        return match;
+    if (whitespaceRegex.test(group1)) {
+        return group1 + personify(group2, group2);
     }
     if (group1.toLowerCase() == 'wo') {
         return personify(group1, group2);
+    }
+    if (match.toLowerCase() == "human") {
+        return match;
     }
     return group1 + personify(group1, group2);
 }
@@ -105,7 +105,8 @@ chrome.storage.local.get("enabled", function(items){
             treeWalker.currentNode.nodeValue =
                 treeWalker.currentNode.nodeValue
                 .replace(manSuffixRegex, manSuffixReplacer)
-                .replace(subsRegex, subsReplacer);
+                .replace(subsRegex, subsReplacer)
+                .replace(honourificRegex, "Mx");
         }
         console.log('Gender Blinder completed.');
     }

@@ -7,29 +7,69 @@
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
       }
+      .pass {
+        background-color: rgb(100,255,100);
+      }
+      .fail {
+        background-color: red;
+      }
     </style>
+    <script>
+
+      function indexOfDiff(first, second) {
+        if (first === second) return -1;
+        var index = 0;
+        while (first[index] === second[index++]);
+        return index;
+      }
+
+      function checkAll() {
+        console.log('checkAll');
+        for (el of document.getElementsByTagName('li')) {
+          var text = el.innerHTML;
+          var i = indexOfDiff(text.trim(), el.getAttribute('data-assert').trim());
+          if (i === -1) {
+            el.classList.add('pass');
+          } else {
+            el.innerHTML = '<span class="pass">' + text.substring(0,i) + '</span>' +
+                           '<span class="fail">' + text.substring(i) + ' </span>';
+          }
+        }
+      }
+
+      function checkAllSoon() {
+        console.log('checkAllSoon');
+        setTimeout(checkAll, 1000);
+      }
+    </script>
   </head>
-  <body>
+  <body onload="checkAllSoon()">
   <div>
 
     <ul>
-      <li>He himself gave his apple to her, even though it was his.</li>
-      <li>She herself gave her apple to him, even though it was hers.</li>
-      <li>The man and the woman went to see the wonderwoman/superman film.</li>
-      <li>Humans at the start of a sentence. Human at the start of a sentence.
-          A sentence ending in humans. A sentence ending in human.</li>
-      <li>Women at the start of a sentence. Woman at the start of a sentence.
-          A sentence ending in women. A sentence ending in woman.</li>
-      <li> SHOUTING HUMANS. </li>
-      <li> SHOUTING WOMAN. </li>
-      <li> SHOUTING WOMEN. </li>
-      <li> SHOUTING MAN. </li>
-      <li> SHOUTING MEN. </li>
-      <!-- TODO: Mr. Mrs. etc. -->
+      <li data-assert="They themselves gave their/theirs apple to them/their, even though it was their/theirs.">He himself gave his apple to her, even though it was his.</li>
+      <li data-assert="They themselves gave them/their apple to them, even though it was theirs.">She herself gave her apple to him, even though it was hers.</li>
+      <li data-assert="The person and the person went to see the wonderperson/superperson film.">The man and the woman went to see the wonderwoman/superman film.</li>
+      <li data-assert="Humans at the start of a sentence.">Humans at the start of a sentence.</li>
+      <li data-assert="Human at the start of a sentence.">Human at the start of a sentence.</li>
+      <li data-assert="A sentence ending in humans. ">A sentence ending in humans. </li>
+      <li data-assert="A sentence ending in human.">A sentence ending in human.</li>
+      <li data-assert="People at the start of a sentence.">Women at the start of a sentence.</li>
+      <li data-assert="Person at the start of a sentence.">Woman at the start of a sentence.</li>
+      <li data-assert="A sentence ending in people.">A sentence ending in women.</li>
+      <li data-assert="A sentence ending in person.">A sentence ending in woman.</li>
+      <li data-assert=" SHOUTING HUMANS. "> SHOUTING HUMANS. </li>
+      <li data-assert=" SHOUTING PERSON. "> SHOUTING WOMAN. </li>
+      <li data-assert=" SHOUTING PEOPLE. "> SHOUTING WOMEN. </li>
+      <li data-assert=" SHOUTING PERSON. "> SHOUTING MAN. </li>
+      <li data-assert=" SHOUTING PEOPLE. "> SHOUTING MEN. </li>
+      <li data-assert=" Mx. and Mx. McBoatFace didn't miss Mx Jenkins or Mx Hopkins at the MS Excel conference."> Mr. and Mrs. McBoatFace didn't miss Miss Jenkins or Ms Hopkins at the MS Excel conference.</li>
+      <li data-assert="One Person, Two Guvnors.">One Man, Two Guvnors.</li>
     </ul>
 
 
   </div>
+
 
   </body>
 </html>
