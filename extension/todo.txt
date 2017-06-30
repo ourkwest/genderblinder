@@ -1,2 +1,8 @@
 
  * choose the gender pronouns you want
+ * add version number to popup?
+ * deploy script
+    - update version number in manifest
+    - copy version number to popup
+    - open chrome developer dashboard in browser
+    - git commit (and tag?)
