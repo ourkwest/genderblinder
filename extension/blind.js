@@ -78,6 +78,23 @@ function manSuffixReplacer(match, group1, group2) {
     return group1 + personify(group1, group2);
 }
 
+function mark(string) {
+    return '_' + string + '_';
+}
+
+function markingManSuffixReplacer(match, group1, group2) {
+    if (whitespaceRegex.test(group1)) {
+        return group1 + mark(personify(group2, group2));
+    }
+    if (group1.toLowerCase() == 'wo') {
+        return mark(personify(group1, group2));
+    }
+    if (match.toLowerCase() == "human") {
+        return match;
+    }
+    return group1 + mark(personify(group1, group2));
+}
+
 function subsReplacer(match) {
   var substitution = substitutions[match.toLowerCase()];
   var first = substitution.charAt(0);
@@ -92,6 +109,12 @@ function subsReplacer(match) {
   return substitution;
 }
 
+function marking(f) {
+    return function () {
+        return mark(f.apply(undefined, arguments));
+    }
+}
+
 var treeWalker = document.createTreeWalker (
     document.body,
     NodeFilter.SHOW_TEXT,
@@ -99,14 +122,25 @@ var treeWalker = document.createTreeWalker (
     false
 );
 
-chrome.storage.local.get("enabled", function(items){
+chrome.storage.local.get(["enabled", "mark"], function(items){
     if (items.enabled) {
-        while (treeWalker.nextNode()) {
-            treeWalker.currentNode.nodeValue =
-                treeWalker.currentNode.nodeValue
-                .replace(manSuffixRegex, manSuffixReplacer)
-                .replace(subsRegex, subsReplacer)
-                .replace(honourificRegex, "Mx");
+        if (items.mark) {
+            while (treeWalker.nextNode()) {
+                treeWalker.currentNode.nodeValue =
+                    treeWalker.currentNode.nodeValue
+                    .replace(manSuffixRegex, markingManSuffixReplacer)
+                    .replace(subsRegex, marking(subsReplacer))
+                    .replace(honourificRegex, mark("Mx"));
+            }
+        }
+        else {
+            while (treeWalker.nextNode()) {
+                treeWalker.currentNode.nodeValue =
+                    treeWalker.currentNode.nodeValue
+                    .replace(manSuffixRegex, manSuffixReplacer)
+                    .replace(subsRegex, subsReplacer)
+                    .replace(honourificRegex, "Mx");
+            }
         }
         console.log('Gender Blinder completed.');
     }

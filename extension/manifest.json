@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Gender Blinder",
-  "version": "1.0",
+  "version": "1.2",
   "description": "This extension attempts to suppress implicit gender identity in the pages you visit.",
   "homepage_url": "http://path/to/homepage",
 

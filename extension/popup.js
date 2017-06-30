@@ -1,22 +1,31 @@
 
-function renderStatus(onOrOff) {
-  document.getElementById('status').textContent = onOrOff ? 'Now On' : 'Now Off';
+function renderOnOffStatus(onp) {
+  document.getElementById('status-on-off').textContent = onp ? 'Now On' : 'Now Off';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    var checkbox = document.getElementById('checkbox');
+    var checkboxOnOff = document.getElementById('checkbox-on-off');
+    var checkboxMark = document.getElementById('checkbox-mark');
     var button = document.getElementById('button');
 
     chrome.storage.local.get("enabled", function(items){
-        checkbox.checked = items.enabled;
-        renderStatus(items.enabled);
+        checkboxOnOff.checked = items.enabled;
+        renderOnOffStatus(items.enabled);
     });
 
-    checkbox.addEventListener('change', function(event) {
+    chrome.storage.local.get("mark", function(items){
+        checkboxMark.checked = items.mark;
+    });
+
+    checkboxOnOff.addEventListener('change', function(event) {
         chrome.storage.local.set({"enabled": event.target.checked}, function(){
-            renderStatus(event.target.checked);
+            renderOnOffStatus(event.target.checked);
         });
+    });
+
+    checkboxMark.addEventListener('change', function(event) {
+        chrome.storage.local.set({"mark": event.target.checked}, function(){});
     });
 
     button.addEventListener('click', function(event) {

@@ -1,6 +1,6 @@
 # Gender Blinder
 
-A browser extension to remove implicit gender from English language web pages.
+An open source browser extension to remove implicit gender from English language web pages.
 
 ## Known limitations
 
@@ -8,6 +8,7 @@ A browser extension to remove implicit gender from English language web pages.
 * Making gender specific words non-gender-specific is a lossy operation; information about the genders of characters being described is lost. This can make text more ambiguous. 
 * There is not a one-to-one mapping between English pronouns of different genders, so sometimes there are two possible substitutions i.e. "his" -> "her" OR "his" -> "hers".
 * Not all gender specific words are covered.
+* Sometimes words unrelated to gender get changed by accident. For example they may have a similar/identical spelling to a gender-specific word.
 
 ## Install
 
