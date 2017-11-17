@@ -5,7 +5,6 @@ if [[ `git status --porcelain` ]]; then
   exit 1
 fi
 
-
 CURRENT_VERSION=$(grep -e '"version": ' extension/manifest.json | cut -d \" -f 4)
 NEXT_VERSION=$(echo ${CURRENT_VERSION} | cut -d . -f 1).$(($(echo ${CURRENT_VERSION} | cut -d . -f 2) + 1))
 
@@ -25,3 +24,6 @@ cd ..
 cp tempdir/tempfile.zip extension.zip
 rm -rf tempdir
 
+git add extension/manifest.json
+git commit -m "Bumping version number to $NEXT_VERSION"
+git tag "version-$NEXT_VERSION"
