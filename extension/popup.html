@@ -7,15 +7,37 @@
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
       }
+      h3 {
+        margin: 5px;
+      }
+      input[type=button] {
+        background-color: rgb(100,255,100);
+        border: 1px solid black;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: larger;
+      }
+      td {
+        padding: 5px;
+      }
+      .centred {
+        text-align: center;
+      }
+      a {
+        font-size: smaller;
+      }
     </style>
     <script src="popup.js"></script>
   </head>
   <body>
 
   <table>
-    <tr>
+    <tr class="centred">
       <td><img src="icon32.png"/></td>
-      <td><h3>Gender Blinder</h3></td>
+      <td>
+        <h3>Gender Blinder</h3>
+        {{version}}
+      </td>
     </tr>
     <tr>
       <td colspan="2">
@@ -33,6 +55,8 @@
     </tr>
     <tr>
       <td colspan="2">
+        Pronouns:
+        <br/>
         <select id="select-pronouns">
           <option value="a">She, Her, Hers, Herself</option>
           <option value="b">He, Him, His, Himself</option>
@@ -46,11 +70,19 @@
       </td>
     </tr>
     <tr>
-      <td colspan="2">
+      <td colspan="2" class="centred">
           <input id="button-reload" type="button" value="Reload current page"/>
       </td>
     </tr>
   </table>
+
+  <a href="https://chrome.google.com/webstore/detail/gender-blinder/fchfnnmlenjoppfonlacepldllfaglmg" target="_blank">
+    On Chrome Web Store
+  </a>
+  |
+  <a href="https://github.com/peterwestmacott/genderblinder" target="_blank">
+    Source Code
+  </a>
 
   </body>
 </html>
