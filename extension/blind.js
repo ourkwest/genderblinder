@@ -10,18 +10,6 @@ var pronounSets = { /* more: https://en.wikipedia.org/wiki/Third-person_pronoun#
    'h': ['zie', 'zim', 'zir', 'zirs', 'zirself']
 };
 
-var target = 'f';
-
-var pronounSubs = {
-    'she': pronounSets[target][0],
-    'her': pronounSets[target][1] + "/" + pronounSets[target][2],
-    'hers': pronounSets[target][3],
-    'herself': pronounSets[target][4],
-    'he': pronounSets[target][0],
-    'him': pronounSets[target][1],
-    'his': pronounSets[target][2] + "/" + pronounSets[target][3],
-    'himself': pronounSets[target][4]
-};
 
 var nounSubs = {
     'witch': 'witzard',
@@ -45,11 +33,31 @@ var nounSubs = {
     'boyfriend': 'friend',
 };
 
+var substitutions = null;
+var subsRegex = null;
+var target = null;
+
+function rebuildSubsRegex(pronounSetId) {
+    if (target != pronounSetId) {
+        console.log('Gender Blinder is regenerating its pronoun detector.');
+        target = pronounSetId;
+        var pronounSubs = {
+            'she': pronounSets[target][0],
+            'her': pronounSets[target][1] + "/" + pronounSets[target][2],
+            'hers': pronounSets[target][3],
+            'herself': pronounSets[target][4],
+            'he': pronounSets[target][0],
+            'him': pronounSets[target][1],
+            'his': pronounSets[target][2] + "/" + pronounSets[target][3],
+            'himself': pronounSets[target][4]
+        };
+        substitutions = Object.assign(pronounSubs, nounSubs);
+        subsRegex = new RegExp('\\b(' + Object.keys(substitutions).join('|') + ')\\b', 'ig');
+    }
+}
+
 var honourifics = ['Mr','Mrs','Ms','Miss'];
 
-var substitutions = Object.assign(pronounSubs, nounSubs);
-
-var subsRegex = new RegExp('\\b(' + Object.keys(substitutions).join('|') + ')\\b', 'ig');
 var honourificRegex = new RegExp('\\b(' + honourifics.join('|') + ')\\b', 'g');
 var manSuffixRegex = new RegExp('(..)(man|men)\\b', 'ig');
 var whitespaceRegex = new RegExp('\\s');
@@ -122,8 +130,9 @@ var treeWalker = document.createTreeWalker (
     false
 );
 
-chrome.storage.local.get(["enabled", "mark"], function(items){
+chrome.storage.local.get(["enabled", "mark", "pronouns"], function(items){
     if (items.enabled) {
+        rebuildSubsRegex(items.pronouns || "f");
         if (items.mark) {
             while (treeWalker.nextNode()) {
                 treeWalker.currentNode.nodeValue =
@@ -143,8 +152,5 @@ chrome.storage.local.get(["enabled", "mark"], function(items){
             }
         }
         console.log('Gender Blinder completed.');
-    }
-    else {
-        console.log('Gender Blinder is disabled.');
     }
 });

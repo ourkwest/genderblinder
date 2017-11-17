@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var checkboxOnOff = document.getElementById('checkbox-on-off');
     var checkboxMark = document.getElementById('checkbox-mark');
-    var button = document.getElementById('button');
+    var selectPronouns = document.getElementById('select-pronouns');
+    var button = document.getElementById('button-reload');
 
     chrome.storage.local.get("enabled", function(items){
         checkboxOnOff.checked = items.enabled;
@@ -18,6 +19,10 @@ document.addEventListener('DOMContentLoaded', function() {
         checkboxMark.checked = items.mark;
     });
 
+    chrome.storage.local.get("pronouns", function(items){
+        selectPronouns.value = items.pronouns || "f";
+    });
+
     checkboxOnOff.addEventListener('change', function(event) {
         chrome.storage.local.set({"enabled": event.target.checked}, function(){
             renderOnOffStatus(event.target.checked);
@@ -26,6 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     checkboxMark.addEventListener('change', function(event) {
         chrome.storage.local.set({"mark": event.target.checked}, function(){});
+    });
+
+    selectPronouns.addEventListener('change', function(event) {
+        chrome.storage.local.set({"pronouns": event.target.value}, function(){});
     });
 
     button.addEventListener('click', function(event) {

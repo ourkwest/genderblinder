@@ -19,7 +19,9 @@
       function indexOfDiff(first, second) {
         if (first === second) return -1;
         var index = 0;
-        while (first[index] === second[index++]);
+        while (first[index] === second[index]) {
+          index++;
+        };
         return index;
       }
 
