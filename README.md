@@ -2,6 +2,13 @@
 
 An open source browser extension to remove implicit gender from English language web pages.
 
+## Features
+
+* Replaces gendered words on web pages.
+* Choose between 8 sets of personal pronouns.
+* Optionally marks substitutions.
+* On / Off switch, with page reload button.
+
 ## Known limitations
 
 * Due to the ambiguous nature of language, removing gender from natural English cannot easily be done with 100% accuracy.
