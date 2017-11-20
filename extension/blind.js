@@ -11,27 +11,42 @@ var pronounSets = { /* more: https://en.wikipedia.org/wiki/Third-person_pronoun#
 };
 
 
-var nounSubs = {
-    'witch': 'witzard',
-    'wizard': 'witzard',
-    'sister': 'sibling',
-    'brother': 'sibling',
-    'wife': 'spouse',
-    'husband': 'spouse',
-    'daughter': 'child',
-    'son': 'child',
-    'mum': 'parent',
-    'mom': 'parent',
-    'mother': 'parent',
-    'mummy': 'parent',
-    'dad': 'parent',
-    'daddy': 'parent',
-    'father': 'parent',
-    'girl': 'child',
-    'boy': 'child',
-    'girlfriend': 'friend',
-    'boyfriend': 'friend',
-};
+var nounSubs = {};
+
+function addNoun(from, into) {
+
+    var froms = from.split(",");
+    var fromSingular = froms[0];
+    var fromPlural = froms[1] || (fromSingular + 's');
+
+    var intos = into.split(",");
+    var intoSingular = intos[0];
+    var intoPlural = intos[1] || (intoSingular + 's');
+
+    nounSubs[fromSingular] = intoSingular;
+    nounSubs[fromPlural] = intoPlural;
+}
+
+addNoun('witch,witches', 'witzard');
+addNoun('wizard', 'witzard');
+addNoun('sister', 'sibling');
+addNoun('brother', 'sibling');
+addNoun('wife,wives', 'spouse');
+addNoun('husband', 'spouse');
+addNoun('daughter', 'child');
+addNoun('son', 'child');
+addNoun('mum', 'parent');
+addNoun('mom', 'parent');
+addNoun('mother', 'parent');
+addNoun('mommy,mommies', 'parent');
+addNoun('mummy,mummies', 'parent');
+addNoun('dad', 'parent');
+addNoun('daddy,daddies', 'parent');
+addNoun('father', 'parent');
+addNoun('girl', 'child');
+addNoun('boy', 'child');
+addNoun('girlfriend', 'friend');
+addNoun('boyfriend', 'friend');
 
 var substitutions = null;
 var subsRegex = null;
@@ -59,21 +74,25 @@ function rebuildSubsRegex(pronounSetId) {
 var honourifics = ['Mr','Mrs','Ms','Miss'];
 
 var honourificRegex = new RegExp('\\b(' + honourifics.join('|') + ')\\b', 'g');
-var manSuffixRegex = new RegExp('(..)(man|men)\\b', 'ig');
+var manSuffixRegex = new RegExp('(..)?(man|men|mens)\\b', 'ig');
 var whitespaceRegex = new RegExp('\\s');
 var upperCaseRegex = new RegExp('^[A-Z]{2}');
 var lowerCaseRegex = new RegExp('^[a-z]{2}');
 
 function personify(caseTest, part2) {
+    var part2Lower = part2.toLowerCase();
     if (upperCaseRegex.test(caseTest)) {
-        return part2.toLowerCase() == 'men' ? 'PEOPLE' : 'PERSON';
+        return part2Lower == 'man' ? 'PERSON' : part2Lower == 'men' ? 'PEOPLE' : 'PEOPLES';
     } else if (lowerCaseRegex.test(caseTest)) {
-        return part2.toLowerCase() == 'men' ? 'people' : 'person';
+        return part2Lower == 'man' ? 'person' : part2Lower == 'men' ? 'people' : 'peoples';
     }
-    return part2 == 'men' ? 'People' : 'Person';
+    return part2Lower == 'man' ? 'Person' : part2Lower == 'men' ? 'People' : 'Peoples';
 }
 
 function manSuffixReplacer(match, group1, group2) {
+    if (group1 === undefined) {
+        return personify(group2, group2);
+    }
     if (whitespaceRegex.test(group1)) {
         return group1 + personify(group2, group2);
     }
@@ -91,6 +110,9 @@ function mark(string) {
 }
 
 function markingManSuffixReplacer(match, group1, group2) {
+    if (group1 === undefined) {
+        return personify(group2, group2);
+    }
     if (whitespaceRegex.test(group1)) {
         return group1 + mark(personify(group2, group2));
     }

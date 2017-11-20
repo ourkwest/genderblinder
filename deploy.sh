@@ -27,3 +27,5 @@ rm -rf tempdir
 git add extension/manifest.json
 git commit -m "Bumping version number to $NEXT_VERSION"
 git tag "version-$NEXT_VERSION"
+
+open https://chrome.google.com/webstore/developer/dashboard
